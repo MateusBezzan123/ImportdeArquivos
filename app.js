@@ -1,14 +1,18 @@
 const express = require('express');
-const fileUpload = require('express-fileupload');
-const arquivoRoutes = require('./src/routes/arquivoRoutes');
-
 const app = express();
 
-// Configurar middleware para o upload de arquivos
-app.use(fileUpload());
-app.use("/", arquivoRoutes);
+app.use(express.json());
 
-// Iniciar o servidor
+// Rotas
+const arquivoRoutes = require('./src/routes/arquivoRoutes');
+const boletoRoutes = require('./src/routes/boletoRoutes');
+
+app.use('/arquivos', arquivoRoutes);
+app.use('/boletos', boletoRoutes);
+
 app.listen(3000, () => {
-  console.log('Servidor iniciado na porta 3000');
+  console.log('Servidor rodando na porta 3000');
 });
+
+
+module.exports = app;

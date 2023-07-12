@@ -1,34 +1,36 @@
-const csv = require("csv-parser");
-const fs = require("fs");
+const fs = require('fs');
+const csv = require('fast-csv');
 
-function importarBoletos(file) {
+const importarBoletos = async (file) => {
   return new Promise((resolve, reject) => {
     const boletos = [];
 
-    fs.createReadStream(file.tempFilePath)
-      .pipe(csv({ delimiter: ";" }))
-      .on("data", (data) => {
-        // Extrair os dados do CSV
-        const { nome, unidade, valor, linha_digitavel } = data;
+    const stream = fs.createReadStream(file.path);
+    const csvStream = csv.parse({ headers: true });
 
-        // Adicionar boleto à lista
-        boletos.push({
-          nome_sacado: nome,
-          id_lote: parseInt(unidade),
-          valor: parseFloat(valor),
-          linha_digitavel,
-          ativo: true,
-          criado_em: new Date(),
-        });
+    stream
+      .pipe(csvStream)
+      .on('error', (error) => reject(error))
+      .on('data', (data) => {
+        const boleto = {
+          nome_sacado: data.nome_sacado,
+          lote_externo: data.lote_externo,
+          valor: parseFloat(data.valor),
+          linha_digitavel: data.linha_digitavel,
+        };
+
+        boletos.push(boleto);
       })
-      .on("end", () => {
-        resolve(boletos);
-      })
-      .on("error", (error) => {
-        reject(error);
+      .on('end', () => {
+        if (boletos.length === 0) {
+          reject(new Error('Nenhum boleto encontrado no arquivo'));
+        } else {
+          resolve(boletos);
+        }
       });
   });
-}
+};
+
 
 module.exports = {
   importarBoletos,

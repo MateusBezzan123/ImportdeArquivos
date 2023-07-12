@@ -1,8 +1,20 @@
-// routes/boletoRoutes.js
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const arquivoControllerController = require("../controllers/arquivoController");
+const multer = require('multer');
 
-router.post("/importar", arquivoControllerController.importarBoletos);
+const arquivoController = require('../controllers/arquivoController');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'temp/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+
+router.post('/', upload.single('file'), arquivoController.importarArquivo);
 
 module.exports = router;

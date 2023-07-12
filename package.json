@@ -1,0 +1,29 @@
+{
+  "name": "importdearquivos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MateusBezzan123/ImportdeArquivos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MateusBezzan123/ImportdeArquivos/issues"
+  },
+  "homepage": "https://github.com/MateusBezzan123/ImportdeArquivos#readme",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.1",
+    "prisma": "^5.0.0"
+  }
+}

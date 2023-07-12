@@ -1,0 +1,27 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Lote {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  ativo    Boolean
+  criadoEm DateTime @default(now())
+  boletos  Boleto[]
+}
+
+model Boleto {
+  id             Int      @id @default(autoincrement())
+  nomeSacado     String
+  idLote         Int
+  valor          Float
+  linhaDigitavel String
+  ativo          Boolean
+  criadoEm       DateTime @default(now())
+  lote           Lote     @relation(fields: [idLote], references: [id])
+}
